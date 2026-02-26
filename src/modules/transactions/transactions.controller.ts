@@ -1,6 +1,7 @@
 import { Response } from 'express';
 import { AuthRequest } from '../../middleware/auth.middleware';
 import { transactionsService } from './transactions.service';
+import { emitToUser } from '../events/sse.registry';
 
 export const createTransaction = async (req: AuthRequest, res: Response): Promise<void> => {
     try {
@@ -13,6 +14,10 @@ export const createTransaction = async (req: AuthRequest, res: Response): Promis
         }
 
         const transaction = await transactionsService.createTransaction(userId, { signature, type, amount: Number(amount), token, recipient });
+
+        // Push real-time update to all SSE clients connected for this user
+        emitToUser(userId, 'transaction_updated', transaction);
+
         res.status(201).json(transaction);
     } catch (error: any) {
         console.error('Error creating transaction:', error);

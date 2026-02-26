@@ -1,6 +1,7 @@
 import { Response } from 'express';
 import { AuthRequest } from '../../middleware/auth.middleware';
 import * as stakesService from './stakes.service';
+import { emitToUser } from '../events/sse.registry';
 
 export const createStakeAccount = async (req: AuthRequest, res: Response) => {
     try {
@@ -17,6 +18,9 @@ export const createStakeAccount = async (req: AuthRequest, res: Response) => {
             validatorVoteKey,
             amount: Number(amount)
         });
+
+        // Push real-time update to all SSE clients connected for this user
+        emitToUser(userId, 'stakes_updated', newStake);
 
         res.status(201).json(newStake);
     } catch (error: any) {

@@ -13,6 +13,7 @@ import agentRoutes from './modules/chats/agent.routes';
 import stakesRoutes from './modules/stakes/stakes.routes';
 import transactionsRoutes from './modules/transactions/transactions.routes';
 import dashboardRoutes from './modules/dashboard/dashboard.routes';
+import eventsRoutes from './modules/events/events.routes';
 
 const app: Express = express();
 
@@ -54,6 +55,7 @@ app.use('/api/agent', agentRoutes);
 app.use('/api/stakes', stakesRoutes);
 app.use('/api/transactions', transactionsRoutes);
 app.use('/api/dashboard', dashboardRoutes);
+app.use('/api/events', eventsRoutes);   // SSE real-time stream
 
 // --- Error Handling Middleware ---
 // Must be defined after all routes and other middleware
