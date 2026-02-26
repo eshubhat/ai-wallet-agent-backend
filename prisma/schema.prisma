@@ -1,0 +1,80 @@
+generator client {
+  provider = "prisma-client-js"
+  output   = "../../node_modules/.prisma/client"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id            String   @id @default(uuid())
+  email         String   @unique
+  name          String?
+  password      String?
+  walletAddress String?  @unique
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @default(now()) @updatedAt
+
+  contacts      Contact[]
+  chats         Chat[]
+  stakeAccounts StakeAccount[]
+  transactions  Transaction[]
+}
+
+model Contact {
+  id            String   @id @default(uuid())
+  userId        String
+  name          String
+  walletAddress String
+  createdAt     DateTime @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model Chat {
+  id        String   @id @default(uuid())
+  userId    String
+  createdAt DateTime @default(now())
+
+  user     User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  messages Message[]
+}
+
+model Message {
+  id        String   @id @default(uuid())
+  chatId    String
+  role      String // "user" or "agent"
+  content   String   @db.Text
+  createdAt DateTime @default(now())
+
+  chat Chat @relation(fields: [chatId], references: [id], onDelete: Cascade)
+}
+
+
+model StakeAccount {
+  id                 String   @id @default(uuid())
+  userId             String
+  stakeAccountPubkey String
+  validatorVoteKey   String
+  amount             Float
+  createdAt          DateTime @default(now())
+
+  user User @relation(fields: [userId], references: [id])
+
+  @@index([userId])
+}
+
+model Transaction {
+  id        String   @id @default(uuid())
+  userId    String
+  signature String
+  type      String // "transfer", "swap"
+  amount    Float
+  token     String?
+  recipient String?
+  createdAt DateTime @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
