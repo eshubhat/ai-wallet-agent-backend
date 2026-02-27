@@ -4,6 +4,7 @@ import helmet from 'helmet';
 import morgan from 'morgan';
 import rateLimit from 'express-rate-limit';
 import { config } from './config/env';
+import pkg from '../package.json';
 import { errorHandler } from './middleware/error.middleware';
 
 // Route imports
@@ -46,7 +47,7 @@ app.use(express.urlencoded({ extended: true }));
 
 // Basic Health Route
 app.get('/health', (req: Request, res: Response) => {
-    res.status(200).json({ status: 'ok', timestamp: new Date().toISOString(), env: config.env });
+    res.status(200).json({ status: 'ok', version: pkg.version, timestamp: new Date().toISOString(), env: config.env });
 });
 
 // --- API Routes ---
