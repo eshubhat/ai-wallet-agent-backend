@@ -15,10 +15,10 @@ const transporter = nodemailer.createTransport({
 export const sendTaskTriggeredEmail = async (toEmail: string, taskLabel: string) => {
     try {
         const mailOptions = {
-            from: process.env.EMAIL_FROM || '"AI Agent Wallet" <agent@wallet.local>',
+            from: process.env.EMAIL_FROM || '"AutoFi" <agent@autofi.work>',
             to: toEmail,
             subject: `Action Required: Scheduled Task Triggered`,
-            text: `Your scheduled task "${taskLabel}" has met its condition and is ready to be executed!\n\nPlease log in to your dashboard to confirm and sign the transaction.\n\n— AI Agent Wallet`,
+            text: `Your scheduled task "${taskLabel}" has met its condition and is ready to be executed!\n\nPlease log in to your dashboard to confirm and sign the transaction.\n\n— AutoFi`,
             html: `
                 <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
                     <h2>Task Triggered</h2>

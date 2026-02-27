@@ -1,6 +1,6 @@
-# Solana AI Agent Wallet - Backend
+# AutoFi - Backend
 
-This is the backend component of the Solana AI Agent Wallet. Built with Node.js, Express, and Prisma, it acts as the orchestration layer and background worker for the application.
+This is the backend component of AutoFi. Built with Node.js, Express, and Prisma, it acts as the orchestration layer and background worker for the application.
 
 ## ✨ Features
 
@@ -41,7 +41,7 @@ SMTP_PORT=587
 SMTP_SECURE=false
 SMTP_USER="your-email@gmail.com"
 SMTP_PASS="your-16-char-app-password"
-EMAIL_FROM="AI Agent Wallet <your-email@gmail.com>"
+EMAIL_FROM="AutoFi <agent@autofi.work>"
 ```
 
 ### Database Setup
