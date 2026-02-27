@@ -1,4 +1,5 @@
 import prisma from '../../config/prisma';
+import { StakeAccount } from '@prisma/client';
 import { Connection, PublicKey } from '@solana/web3.js';
 
 const connection = new Connection('https://api.devnet.solana.com', 'confirmed');
@@ -24,7 +25,7 @@ export const fetchUserStakeAccounts = async (userId: string) => {
     });
 
     const enrichedStakes = await Promise.all(
-        stakes.map(async (stake) => {
+        stakes.map(async (stake: StakeAccount) => {
             try {
                 const pubkey = new PublicKey(stake.stakeAccountPubkey);
                 const activation = await connection.getStakeActivation(pubkey);
