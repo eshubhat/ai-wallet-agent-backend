@@ -9,19 +9,18 @@ datasource db {
 }
 
 model User {
-  id            String   @id @default(uuid())
-  email         String   @unique
-  name          String?
-  password      String?
-  walletAddress String?  @unique
-  createdAt     DateTime @default(now())
-  updatedAt     DateTime @default(now()) @updatedAt
-
-  contacts      Contact[]
-  chats         Chat[]
-  stakeAccounts StakeAccount[]
-  transactions  Transaction[]
+  id             String          @id @default(uuid())
+  email          String          @unique
+  name           String?
+  password       String?
+  walletAddress  String?         @unique
+  createdAt      DateTime        @default(now())
+  updatedAt      DateTime        @default(now()) @updatedAt
+  chats          Chat[]
+  contacts       Contact[]
   scheduledTasks ScheduledTask[]
+  stakeAccounts  StakeAccount[]
+  transactions   Transaction[]
 }
 
 model Contact {
@@ -30,29 +29,25 @@ model Contact {
   name          String
   walletAddress String
   createdAt     DateTime @default(now())
-
-  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  user          User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
 model Chat {
-  id        String   @id @default(uuid())
+  id        String    @id @default(uuid())
   userId    String
-  createdAt DateTime @default(now())
-
-  user     User      @relation(fields: [userId], references: [id], onDelete: Cascade)
-  messages Message[]
+  createdAt DateTime  @default(now())
+  user      User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  messages  Message[]
 }
 
 model Message {
   id        String   @id @default(uuid())
   chatId    String
-  role      String // "user" or "agent"
-  content   String   @db.Text
+  role      String
+  content   String
   createdAt DateTime @default(now())
-
-  chat Chat @relation(fields: [chatId], references: [id], onDelete: Cascade)
+  chat      Chat     @relation(fields: [chatId], references: [id], onDelete: Cascade)
 }
-
 
 model StakeAccount {
   id                 String   @id @default(uuid())
@@ -61,8 +56,7 @@ model StakeAccount {
   validatorVoteKey   String
   amount             Float
   createdAt          DateTime @default(now())
-
-  user User @relation(fields: [userId], references: [id])
+  user               User     @relation(fields: [userId], references: [id])
 
   @@index([userId])
 }
@@ -71,30 +65,29 @@ model Transaction {
   id        String   @id @default(uuid())
   userId    String
   signature String
-  type      String // "transfer", "swap"
+  type      String
   amount    Float
   token     String?
   recipient String?
   createdAt DateTime @default(now())
-
-  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
 model ScheduledTask {
-  id            String   @id @default(uuid())
+  id            String    @id @default(uuid())
   userId        String
-  status        String   @default("pending")  // pending | triggered | dismissed | cancelled
-  actionType    String   // transfer | swap | stake
-  actionPayload Json     // { amount, recipient, sourceToken, destinationToken, token }
-  triggerType   String   // time | price_gte | price_lte | idle
-  triggerAt     DateTime? // for type=time
-  triggerPrice  Float?   // for type=price_gte / price_lte
-  triggerToken  String?  // e.g. "SOL" for price trigger
-  idleHours     Int?     // for type=idle
-  label         String   // human-readable description, e.g. "Send 0.5 SOL to Alice"
-  createdAt     DateTime @default(now())
-  updatedAt     DateTime @updatedAt
+  status        String    @default("pending")
+  actionType    String
+  actionPayload Json
+  triggerType   String
+  triggerAt     DateTime?
+  triggerPrice  Float?
+  triggerToken  String?
+  idleHours     Int?
+  label         String
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+  user          User      @relation(fields: [userId], references: [id], onDelete: Cascade)
 
-  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
   @@index([userId, status])
 }
