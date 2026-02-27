@@ -21,7 +21,14 @@ Return ONLY valid JSON matching this structure:
       "sourceToken": string (optional, for swap, e.g., SOL),
       "destinationToken": string (optional, for swap, e.g., USDC),
       "recipient": string (optional, base58 Solana address),
-      "message": string (optional, used to explain limitations or unknown requests)
+      "message": string (optional, used to explain limitations or unknown requests),
+      "schedule": { (optional, include this if the user asks to do the action LATER or on a CONDITION)
+         "type": "time" | "price_gte" | "price_lte" | "idle",
+         "isoDate": string (iso 8601 string, REQUIRED if type=time, e.g tomorrow 5pm),
+         "token": string (REQUIRED if type=price_gte or price_lte, e.g. "SOL"),
+         "priceUsd": number (REQUIRED if type=price_gte or price_lte, the target price),
+         "hours": number (REQUIRED if type=idle, e.g. 24)
+      }
     }
   ]
 }
@@ -32,6 +39,8 @@ Examples:
 "Swap all my SOL for USDC" -> {"actions": [{"type":"swap", "useMax":true, "sourceToken":"SOL", "destinationToken":"USDC"}]}
 "What's my balance?" -> {"actions": [{"type":"balance"}]}
 "Stake 5 SOL" -> {"actions": [{"type":"stake", "amount":5, "token":"SOL"}]}
+"Send 0.1 SOL to 56Fx... tomorrow morning" -> {"actions": [{"type":"transfer", "amount":0.1, "token":"SOL", "recipient":"56Fx...", "schedule": {"type":"time", "isoDate":"2026-02-27T09:00:00Z"}}]}
+"Swap 1 SOL to USDC when SOL reaches 250" -> {"actions": [{"type":"swap", "amount":1, "sourceToken":"SOL", "destinationToken":"USDC", "schedule": {"type":"price_gte", "token":"SOL", "priceUsd": 250}}]}
 "Send 0.1 SOL to 56Fxr9k2dqLL3NdMDpbp4xxe1MNAMGGkzCEtywxTnLC and stake 2 SOL" -> {"actions": [{"type":"transfer", "amount":0.1, "token":"SOL", "recipient":"56Fxr9k2dqLL3NdMDpbp4xxe1MNAMGGkzCEtywxTnLC"}, {"type":"stake", "amount":2, "token":"SOL"}]}
 "Deploy a smart contract" -> {"actions": [{"type":"unknown", "message":"I can only help with transfers, swaps, staking, and checking balances right now."}]}
 "Hello!" -> {"actions": [{"type":"unknown", "message":"Hi! I'm your Solana AI Agent. I can help you transfer SOL, swap tokens, stake, or check your balance."}]}

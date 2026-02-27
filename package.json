@@ -19,6 +19,7 @@
     "@google/generative-ai": "^0.24.1",
     "@prisma/client": "^6.0.0",
     "@solana/web3.js": "^1.98.4",
+    "axios": "^1.13.5",
     "bcrypt": "^6.0.0",
     "cors": "^2.8.6",
     "dotenv": "^17.3.1",
@@ -40,6 +41,10 @@
     "@types/jsonwebtoken": "^9.0.10",
     "@types/morgan": "^1.9.10",
     "@types/node": "^25.3.0",
+    "@types/node-cron": "^3.0.11",
+    "@types/nodemailer": "^7.0.11",
+    "node-cron": "^4.2.1",
+    "nodemailer": "^8.0.1",
     "prisma": "^6.0.0",
     "ts-node": "^10.9.2"
   }

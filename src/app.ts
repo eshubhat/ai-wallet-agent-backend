@@ -14,6 +14,7 @@ import stakesRoutes from './modules/stakes/stakes.routes';
 import transactionsRoutes from './modules/transactions/transactions.routes';
 import dashboardRoutes from './modules/dashboard/dashboard.routes';
 import eventsRoutes from './modules/events/events.routes';
+import schedulerRoutes from './modules/scheduler/scheduler.routes';
 
 const app: Express = express();
 
@@ -56,6 +57,7 @@ app.use('/api/stakes', stakesRoutes);
 app.use('/api/transactions', transactionsRoutes);
 app.use('/api/dashboard', dashboardRoutes);
 app.use('/api/events', eventsRoutes);   // SSE real-time stream
+app.use('/api/scheduler', schedulerRoutes);
 
 // --- Error Handling Middleware ---
 // Must be defined after all routes and other middleware

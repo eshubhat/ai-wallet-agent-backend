@@ -21,6 +21,7 @@ model User {
   chats         Chat[]
   stakeAccounts StakeAccount[]
   transactions  Transaction[]
+  scheduledTasks ScheduledTask[]
 }
 
 model Contact {
@@ -77,4 +78,23 @@ model Transaction {
   createdAt DateTime @default(now())
 
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model ScheduledTask {
+  id            String   @id @default(uuid())
+  userId        String
+  status        String   @default("pending")  // pending | triggered | dismissed | cancelled
+  actionType    String   // transfer | swap | stake
+  actionPayload Json     // { amount, recipient, sourceToken, destinationToken, token }
+  triggerType   String   // time | price_gte | price_lte | idle
+  triggerAt     DateTime? // for type=time
+  triggerPrice  Float?   // for type=price_gte / price_lte
+  triggerToken  String?  // e.g. "SOL" for price trigger
+  idleHours     Int?     // for type=idle
+  label         String   // human-readable description, e.g. "Send 0.5 SOL to Alice"
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  @@index([userId, status])
 }
